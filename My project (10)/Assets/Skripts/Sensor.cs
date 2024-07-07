@@ -7,6 +7,8 @@ public class Sensor : MonoBehaviour
     [SerializeField] private UnityEvent _thiefEntered;
     [SerializeField] private UnityEvent _thiefNotDetected;
 
+    bool _thiefUpdated = false;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Thief>())

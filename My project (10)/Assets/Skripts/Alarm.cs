@@ -10,65 +10,34 @@ public class Alarm : MonoBehaviour
     private float _minVolume = 0f;
     private float _maxVolume = 1f;
     private float _changingRate = 0.1f;
-    private bool _isRunning = false;
+    private bool _isAlarmRunning = false;
 
-    private void TurnOn()
+    public void TurnOn()
     {
-        if (_coroutine != null)
-        {
-            StopCoroutine(_coroutine);
-        }
+        _isAlarmRunning = false;
+        _audioSource.Play();
+        _coroutine = StartCoroutine(ChangeVolume(_maxVolume));
+    }
 
-        _coroutine = StartCoroutine(VolumeUp());
+    public void TurnOff()
+    {
+        _isAlarmRunning = true;
 
-        if (_isRunning ==false && _audioSource.volume==0 )
+        _coroutine = StartCoroutine(ChangeVolume(_minVolume));
+
+        if (_audioSource.volume == 0)
         {
             _audioSource.Stop();
         }
     }
 
-    private void TurnOff()
+    private IEnumerator ChangeVolume(float targetVolume)
     {
-        if (_coroutine != null)
+        while ((_isAlarmRunning == false && _audioSource.volume < targetVolume) || (_isAlarmRunning == true && _audioSource.volume > targetVolume))
         {
-            StopCoroutine(_coroutine);
-        }
-
-        _coroutine = StartCoroutine(VolumeDown());
-    }
-
-    private IEnumerator VolumeUp()
-    {
-        _audioSource.Play();
-        float targetVolume;
-
-        while (enabled)
-        {
-            if (_isRunning == false)
-            {
-                _audioSource.volume = _minVolume;
-                targetVolume = _maxVolume;
-                _isRunning = true;
-            }
-            else
-            {
-                targetVolume = _minVolume;
-                _isRunning = false;
-            }
-
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _changingRate * Time.deltaTime);
-            yield return null;
-        }       
-    }
-
-    private IEnumerator VolumeDown()
-    {
-        while (_audioSource.volume > _minVolume)
-        {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _minVolume, _changingRate * Time.deltaTime);
+            
             yield return null;
         }
-
-        _audioSource.Stop();
     }
 }
