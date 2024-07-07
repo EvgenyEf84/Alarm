@@ -10,6 +10,7 @@ public class Alarm : MonoBehaviour
     private float _minVolume = 0f;
     private float _maxVolume = 1f;
     private float _changingRate = 0.1f;
+    private bool _isRunning = false;
 
     private void TurnOn()
     {
@@ -19,6 +20,11 @@ public class Alarm : MonoBehaviour
         }
 
         _coroutine = StartCoroutine(VolumeUp());
+
+        if (_isRunning ==false && _audioSource.volume==0 )
+        {
+            _audioSource.Stop();
+        }
     }
 
     private void TurnOff()
@@ -34,13 +40,25 @@ public class Alarm : MonoBehaviour
     private IEnumerator VolumeUp()
     {
         _audioSource.Play();
-        _audioSource.volume = _minVolume;
+        float targetVolume;
 
-        while (_audioSource.volume < _maxVolume)
+        while (enabled)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, _maxVolume, _changingRate * Time.deltaTime);
+            if (_isRunning == false)
+            {
+                _audioSource.volume = _minVolume;
+                targetVolume = _maxVolume;
+                _isRunning = true;
+            }
+            else
+            {
+                targetVolume = _minVolume;
+                _isRunning = false;
+            }
+
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _changingRate * Time.deltaTime);
             yield return null;
-        }
+        }       
     }
 
     private IEnumerator VolumeDown()

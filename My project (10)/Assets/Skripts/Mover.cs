@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class Mover2 : MonoBehaviour
+public class Mover : MonoBehaviour
 {
     private const string Horizontal = nameof(Horizontal);
     private const string Vertical  = nameof(Vertical);

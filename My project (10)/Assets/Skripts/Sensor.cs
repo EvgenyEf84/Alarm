@@ -4,14 +4,14 @@ using UnityEngine.Events;
 
 public class Sensor : MonoBehaviour
 {
-    [SerializeField] private UnityEvent ThiefEntered;
-    [SerializeField] private UnityEvent ThiefNotDetected;
+    [SerializeField] private UnityEvent _thiefEntered;
+    [SerializeField] private UnityEvent _thiefNotDetected;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Thief>())
         {
-            ThiefEntered?.Invoke();
+            _thiefEntered?.Invoke();
         }
     }
 
@@ -19,7 +19,7 @@ public class Sensor : MonoBehaviour
     {
         if (other.GetComponent<Thief>())
         {
-            ThiefNotDetected?.Invoke();
+            _thiefNotDetected?.Invoke();
         }            
     }
 }
