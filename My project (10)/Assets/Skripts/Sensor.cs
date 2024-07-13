@@ -1,19 +1,16 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Sensor : MonoBehaviour
 {
-    [SerializeField] private UnityEvent _thiefEntered;
-    [SerializeField] private UnityEvent _thiefNotDetected;
-
-    bool _thiefUpdated = false;
+    public event Action ThiefEntered;
+    public event Action ThiefNotDetected;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Thief>())
         {
-            _thiefEntered?.Invoke();
+            ThiefEntered?.Invoke();
         }
     }
 
@@ -21,7 +18,7 @@ public class Sensor : MonoBehaviour
     {
         if (other.GetComponent<Thief>())
         {
-            _thiefNotDetected?.Invoke();
+            ThiefNotDetected?.Invoke();
         }            
     }
 }

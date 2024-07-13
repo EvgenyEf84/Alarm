@@ -435,7 +435,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c107f491d5113b7458c6c0b016e502f5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.06
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -843,7 +843,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bccf5ad92f2fc54ba9ca5f9500c2d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ThiefEntered:
+  _thiefEntered:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1707383913}
@@ -858,7 +858,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  ThiefNotDetected:
+  _thiefNotDetected:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1707383913}
@@ -1209,7 +1209,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _audioSource: {fileID: 912750869}
-  _sensor: {fileID: 1335231272}
 --- !u!82 &1707383914
 AudioSource:
   m_ObjectHideFlags: 0

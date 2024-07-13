@@ -12,32 +12,66 @@ public class Alarm : MonoBehaviour
     private float _changingRate = 0.1f;
     private bool _isAlarmRunning = false;
 
-    public void TurnOn()
+    private void OnEnable()
     {
-        _isAlarmRunning = false;
-        _audioSource.Play();
-        _coroutine = StartCoroutine(ChangeVolume(_maxVolume));
+        _sensor.ThiefEntered += TurnOn;
+        _sensor.ThiefNotDetected += TurnOff;
     }
 
-    public void TurnOff()
+    private void OnDisable()
     {
-        _isAlarmRunning = true;
+        _sensor.ThiefEntered -= TurnOn;
+        _sensor.ThiefNotDetected -= TurnOff;
+    }
 
-        _coroutine = StartCoroutine(ChangeVolume(_minVolume));
+    private void TurnOn()
+    {      
+        CheckCoroutine();
+
+        _isAlarmRunning = false;
+        _coroutine = StartCoroutine(ChangeVolume());
+    }
+
+    private void TurnOff()
+    {
+        CheckCoroutine();
+
+        _isAlarmRunning = true;
+        _coroutine = StartCoroutine(ChangeVolume());
+    }
+
+    private void CheckCoroutine()
+    {
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+    }
+
+    private IEnumerator ChangeVolume()
+    {
+        float targetVolume;
+
+        _audioSource.Play();
+
+        while (enabled)
+        {
+            if (_isAlarmRunning == true)
+            {
+                targetVolume = _minVolume;
+            }
+            else
+            {
+                targetVolume = _maxVolume;
+            }
+
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _changingRate * Time.deltaTime);
+            yield return null;
+        }
 
         if (_audioSource.volume == 0)
         {
             _audioSource.Stop();
-        }
-    }
-
-    private IEnumerator ChangeVolume(float targetVolume)
-    {
-        while ((_isAlarmRunning == false && _audioSource.volume < targetVolume) || (_isAlarmRunning == true && _audioSource.volume > targetVolume))
-        {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, targetVolume, _changingRate * Time.deltaTime);
-            
-            yield return null;
         }
     }
 }
